@@ -1,10 +1,20 @@
+export PYTHONPATH = .
+check_dirs := src
 
+format-fix:
+	uv run ruff format $(check_dirs)
+	uv run ruff check --select I --fix 
 
-# --- Utilities ---
-help:
-	@grep -E '^[a-zA-Z0-9 -]+:.*#'  Makefile | sort | while read -r l; do printf "\033[1;32m$$(echo $$l | cut -f 1 -d':')\033[00m:$$(echo $$l | cut -f 2- -d'#')\n"; done
+lint-fix:
+	uv run ruff check --fix
 
+format-check:
+	uv run ruff format --check $(check_dirs) 
+	uv run ruff check -e
+	uv run ruff check --select I -e
 
-# --- Development ---
-run:
-	uv run python -m ai_twin.main
+lint-check:
+	uv run ruff check $(check_dirs)
+
+test:
+	uv run pytest tests/
