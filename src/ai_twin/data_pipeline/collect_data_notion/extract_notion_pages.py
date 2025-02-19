@@ -5,6 +5,7 @@ from zenml import step
 
 from ai_twin import settings
 
+
 @step
 def extract_notion_pages(
     page_ids: list[str],
@@ -14,6 +15,7 @@ def extract_notion_pages(
         page_content = _retrieve_page_content(page_id)
         page_contents[page_id] = page_content
     return page_contents
+
 
 def _retrieve_page_content(page_id: str, depth: int = 0) -> str:
     blocks_url = f"https://api.notion.com/v1/blocks/{page_id}/children?page_size=100"
@@ -36,6 +38,7 @@ def _retrieve_page_content(page_id: str, depth: int = 0) -> str:
     except Exception as e:  # noqa: BLE001
         logger.opt(exception=True).debug("Error retrieving Notion page content")
         return f"Error: An unexpected error occurred while retrieving Notion page content. {e}"
+
 
 def parse_blocks(blocks: list, depth: int = 0) -> str:
     content = ""
@@ -81,13 +84,15 @@ def parse_blocks(blocks: list, depth: int = 0) -> str:
             child_content = _retrieve_page_content(child_id, depth + 1)
             content += child_content + "\n\n"
         elif block_type == "child_database":
-            db_id = block.get("id")
+            # db_id = block.get("id")
             db_title = block.get("child_database", {}).get("title", "Untitled Database")
             content += f"\n### Database: {db_title}\n\n"
     return content.strip()
 
+
 def parse_rich_text(rich_text: list) -> str:
     return "".join(segment.get("plain_text", "") for segment in rich_text)
+
 
 def extract_urls(rich_text: list) -> list:
     """Extract URLs from rich text blocks."""
@@ -98,6 +103,7 @@ def extract_urls(rich_text: list) -> list:
         if "url" in text.get("annotations", {}):
             urls.append(text["annotations"]["url"])
     return urls
+
 
 def _fetch_block_children(block_id: str) -> list:
     """Fetch children blocks for a given block ID."""

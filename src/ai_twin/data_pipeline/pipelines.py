@@ -1,10 +1,12 @@
 from loguru import logger
 from zenml import pipeline
+
 from ai_twin.data_pipeline.collect_data_notion import (
     extract_notion_pages,
     extract_notion_pages_metadata,
     save_notion_pages,
 )
+
 
 @pipeline
 def collect_notion(database_ids: list[str]) -> None:

@@ -1,4 +1,6 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
     # --- Required settings when exporting your Notion data. ---
@@ -24,6 +26,7 @@ class Settings(BaseSettings):
     AWS_ACCESS_KEY: str | None = None
     AWS_SECRET_KEY: str | None = None
     AWS_ARN_ROLE: str | None = None
+
     @property
     def OPENAI_MAX_TOKEN_WINDOW(self) -> int:
         official_max_token_window = {
@@ -34,4 +37,6 @@ class Settings(BaseSettings):
         }.get(self.OPENAI_MODEL_ID, 128000)
         max_token_window = int(official_max_token_window * 0.90)
         return max_token_window
+
+
 settings = Settings()

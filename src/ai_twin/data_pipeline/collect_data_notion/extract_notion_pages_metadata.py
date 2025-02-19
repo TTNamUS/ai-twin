@@ -1,11 +1,13 @@
 import json
 from typing import Any
+
 import requests
 from loguru import logger
 from typing_extensions import Annotated
 from zenml import step
 
 from ai_twin import settings
+
 
 @step
 def extract_notion_pages_metadata(
@@ -14,6 +16,7 @@ def extract_notion_pages_metadata(
     notion_datapage_results = _query_notion_database(database_id)
     ids = [page["id"] for page in notion_datapage_results]
     return ids
+
 
 def _query_notion_database(
     database_id: str, query_json: str | None = None
