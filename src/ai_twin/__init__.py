@@ -1,6 +1,3 @@
-from .jokes import get_joke
+from .config import settings
 
-
-def make_me_laugh():
-    joke = get_joke()
-    print(f"{joke['preambula']}")
+__all__ = ["settings"]
